@@ -1,0 +1,158 @@
+Cheat-Sheet:
+
+KAFKA:
+
+Zookeeper run: bin/zookeeper-server-start.sh config/zookeeper.properties
+Kafka run: bin/kafka-server-start.sh config/server.properties
+Produce run: bin/kafka-console-producer.sh --broker-list localhost:9092 --topic unverified
+Consumer run: bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic unverified --from-beginning
+List Topics: bin/kafka-topics.sh --zookeeper localhost:2181 --list
+Topic Details: bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic <topic_name>
+Topic Dir: /<kafka-log-folder>/<topicName>-<partitionNum>/xxxx.index & xxxx.log Eg: /tmp/kafka-logs/my_topic-0/ 0000.index & 0000.log
+
+HADOOP:
+
+Resource Manager: http://localhost:50070
+JobTracker: http://localhost:8088
+Specific Node Information: http://localhost:8042
+Job History: http://localhost:19888/jobhistory/app
+$ jps
+$ yarn  // For resource management more information than the web interface.
+$ mapred   // Detailed information about jobs
+
+Check the Unhealthy nodes: http://<active_RM>:8088/cluster/nodes/unhealthy
+Check space occupied: hadoop fs -du -h
+
+Yarn Logs: yarn logs -applicationId <app_id> --appOwner <app_owner_id>
+
+To Run a Job in Hadoop:
+1. $ hdfs dfs -mkdir -p /user/hadoop/input
+2. $ hdfs dfs -put LICENSE.txt /user/hadoop/input/
+3. $ cd $HADOOP_HOME
+4. $ hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar wordcount input output
+5. $ hdfs dfs -ls /user/hadoop/output
+6. $ hdfs dfs -cat /user/hadoop/output/part-r-00000
+
+Check jobs and remove output folder:
+1. hadoop job -list
+2. hadoop fs -rm -r /user/hadoop/output
+
+Remove safe mode: 
+1. bin/hadoop dfsadmin -safemode leave
+  or hdfs dfsadmin -safemode leave
+
+GRADLE: 
+
+build.gradle changes to include output streams on testcase run:
+    test {
+	testLogging.showStandardStreams = true
+    }
+
+http://isl-dsdc-dev.ca.com:80/artifactory/pyGradlePyPi/pypi.zip!/pypi/kafka-python/1.3.5/kafka-python-1.3.5.ivy
+
+PyGradle:
+
+To setup local pivy repository:
+1. Fetch latest pivy-importer.jar file from: https://bintray.com/linkedin/maven/pivy-importer/
+    1. [Example: https://bintray.com/linkedin/maven/pivy-importer/0.6.15#files/com%2Flinkedin%2Fpygradle%2Fpivy-importer%2F0.6.15]
+2. To download package: java -jar pivy-importer-0.6.15-all.jar --repo /tmp/repo/ <package1>:<version> <package2>:<version> --replace alabaster:0.7=alabaster:0.7.1,pytz:0a=pytz:2016.4,Babel:0.8=Babel:1.0,sphinx_rtd_theme:0.1=sphinx_rtd_theme:0.1.1
+
+PYTHON:
+
+Pip install issue (operation not permitted): pip install --upgrade setuptools --user python
+Pip list all packages: pip list
+Pip freeze list: pip freeze
+Pip upgrade: pip install --upgrade numpy
+
+Pretty JSON in Sublime Text: CMD + CTRL + J
+
+Keystore:
+keytool -list -v -keystore keystore.jks 
+
+DOCKER:
+Install Docker:
+1. sudo yum install -y yum-utils
+2. curl -fsSL https://get.docker.com/ | sh
+3. sudo yum makecache fast
+4. sudo systemctl start docker
+5. docker version
+
+Check compatibility on CentOS 7:
+1. curl https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh > check-config.sh
+2. bash ./check-config.sh
+
+On RHEL 7:
+https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/dockerce_rhel.html
+
+Install Docker-Compose (on Centos 7):
+1. sudo usermod -aG docker $(whoami)
+2. sudo systemctl enable docker.service
+3. sudo systemctl start docker.service
+4. sudo yum install epel-release
+5. sudo yum install -y python-pip
+6. sudo pip install docker-compose
+7. sudo yum upgrade python*
+
+On Docker:
+1. If not installed: https://docs.docker.com/compose/install/
+2. Download docker-compose.yml from jarvis_installer/jarvisScripts/ folder.
+3. Add environment variables:
+    1. export LOCAL_HOST=<ip_config>
+    2. export DOCKER_REGISTRY_PORT=5000(dev)/5001(prd)
+    3. export HOST_NAME=<m/c hostname>
+4. docker-compose up -d
+5. docker ps -a
+6. Full docker logs: journalctl -f
+7. 
+8. To enter inside container: docker exec -it <container_id> bash
+9. Container logs: docker logs <container_id>
+10. To copy files from and to container: 
+    1. docker cp foo.txt mycontainer:/foo.txt
+    2. docker cp mycontainer:/foo.txt foo.txt
+
+To release all the containers that are already existing:
+1. docker rm $(docker ps -aq) -f
+
+To remove all the images that are already existing:
+1. docker rmi $(docker images -a -q)
+
+Stop and pull and start Docker:
+1. docker-compose down
+2. docker-compose up -d
+
+To start an exited container:
+1. docker start <container_id>
+
+To replace jar/war in Docker for Testing:
+1. Git clone the repo
+2. Replace war/jar in build/libs folder 
+3. To create a image: docker build . -t <custom name>
+4. Replace the image property in the docker-compose.yml file with <custom name>.
+5. Stop and start docker using docker-compose down & up -d.
+6. To Check all images and image_ids: docker images
+
+On Docker Swarm:
+1. Check all nodes: docker node ls
+2. Check all services: docker service ls
+3. Check specific node machine: docker service ps --no-trunc <id> (—pretty)
+4. Check all services with machine details: docker stack ps jarvis | grep Running
+5. Remove stack: docker stack rm <project_id> Eg: docker stack rm jarvis
+6. Remove Label: docker node update --label-rm <label> <node>
+7. Add Label: docker node update --label-add <label>=true <node>
+8. List nodes with labels: docker node ls -q | xargs docker node inspect -f '{{ .ID }} [{{ .Description.Hostname }}]: {{ range $k, $v := .Spec.Labels }}{{ $k }}={{ $v }} {{end}}'
+
+ELASTICSEARCH:
+Cluster Setup of Jarvis:
+1. ElasticSearch Clustering:
+    1. Add the below lines to config/elasticsearch.yml file:
+        1. cluster.name: elastic search  # Some common name
+        2. node.name: ${HOSTNAME}
+        3. node.master : true  # For making it MASTER_NODE
+        4. node.data: true  # For making it DATA_NODE
+        5. node.ingest: false
+        6. node.attr.box_type: hot  # For making it Hot / Warm Node
+        7. discovery.zen.ping.unicast.hosts: [“Hostname_1”, …, “Hostname_n”]
+        8. http.cors.enabled: true
+        9. http.cors.allow-origin: "*"
+        10. http.cors.allow-headers: Authorization
+
