@@ -76,9 +76,5 @@ public class LRUCache {
 		}
 		return -1;
 	}
-	
-	public static void main(String[] args) {
-
-	}
 
 }

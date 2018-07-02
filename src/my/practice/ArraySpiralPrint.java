@@ -16,14 +16,33 @@ public class ArraySpiralPrint {
 	static void spiralPrint(int rows, int cols, int a[][]) {
 		int rowIt = 0, colIt = 0;
 		while (rowIt < rows && colIt < cols) {
-			for (int i=0; i<cols; i++) {
-				System.out.print(a[colIt][i] + " ");
+			// Print top row
+			for (int i=colIt; i<cols; ++i) {
+				System.out.print(a[rowIt][i] + " ");
 			}
-			colIt++;
-			for (int j=rowIt; j<rows; j++) {
-				System.out.print(a[j][cols] + " ");
+			rowIt++;
+			
+			// Print last column
+			for (int i=rowIt; i<rows; ++i) {
+				System.out.print(a[i][cols-1] + " ");
 			}
 			cols--;
+			
+			// Print bottom row
+			if (rowIt < rows) {
+				for (int i=cols-1; i>=colIt; i--) {
+					System.out.print(a[rows-1][i] + " ");
+				}
+				rows--;
+			}
+			
+			// Print first column
+			if (colIt < cols) {
+				for (int i=rows-1; i>=rowIt; i--) {
+					System.out.print(a[i][colIt] + " ");
+				}
+				colIt++;
+			}
 		}
 	}
 }
