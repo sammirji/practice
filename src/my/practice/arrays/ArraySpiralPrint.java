@@ -1,4 +1,4 @@
-package my.practice;
+package my.practice.arrays;
 
 public class ArraySpiralPrint {
 

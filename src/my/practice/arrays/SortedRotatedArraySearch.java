@@ -1,4 +1,4 @@
-package my.practice;
+package my.practice.arrays;
 
 public class SortedRotatedArraySearch {
 	static int search(int a[], int low, int high, int key) {

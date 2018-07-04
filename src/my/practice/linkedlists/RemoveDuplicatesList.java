@@ -1,4 +1,4 @@
-package my.practice;
+package my.practice.linkedlists;
 
 public class RemoveDuplicatesList {
 
