@@ -1,5 +1,13 @@
 package my.practice.trees;
 
+/**
+ * Program to compute sum of all the nodes
+ * in the tree multiplied by the height.
+ *			26  	-- 1
+ *		   /  \
+ *  	  10   5	-- 2
+ *  sum = (10*2)+(5*2)+(26*1)
+ */
 public class WeightedSumTree {
 	Node root;
 	int sum = 0;
@@ -32,8 +40,10 @@ public class WeightedSumTree {
 			return 0;
 		int leftHeight = getMaxHeight(node.left);
 		int rightHeight = getMaxHeight(node.right);
-		if (leftHeight > rightHeight) return leftHeight + 1;
-		else return rightHeight + 1;
+		if (leftHeight > rightHeight) 
+			return leftHeight + 1;
+		else 
+			return rightHeight + 1;
 	}
 	
 	public static void main(String[] args) {

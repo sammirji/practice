@@ -102,8 +102,8 @@ On Docker:
     3. export HOST_NAME=<m/c hostname>
 4. docker-compose up -d
 5. docker ps -a
-6. Full docker logs: journalctl -f
-7. 
+6. Check stats on service: docker stats <service_name>
+7. Full docker logs: journalctl -f
 8. To enter inside container: docker exec -it <container_id> bash
 9. Container logs: docker logs <container_id>
 10. To copy files from and to container: 

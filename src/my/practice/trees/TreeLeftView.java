@@ -3,31 +3,32 @@ package my.practice.trees;
 public class TreeLeftView {
 
 	Node root;
-	static int max_level = 0;
+	static int maxLevel = 0;
 	
 	class Node {
 		Node left, right;
 		int data;
 		
-		Node(int data) {
+		public Node(int data) {
 			this.data = data;
-			left = right = null;
+			this.left = this.right = null;
 		}
-	}
-	
-	private void leftViewUtil(Node node, int level) {
-		if (node == null) return;
-		
-		if (max_level < level) {
-			System.out.println(node.data);
-			max_level = level;
-		}
-		leftViewUtil(node.left, level + 1);
-		leftViewUtil(node.right, level + 1);
 	}
 	
 	public void leftView() {
 		leftViewUtil(root, 1);
+	}
+	
+	private void leftViewUtil(Node node, int level) {
+		if (node == null)
+			return;
+		
+		if (maxLevel < level) {
+			System.out.println(node.data);
+			maxLevel = level;
+		}
+		leftViewUtil(node.left, level+1);
+		leftViewUtil(node.right, level+1);
 	}
 	
 	public static void main(String[] args) {
